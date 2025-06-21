@@ -1,0 +1,157 @@
+"use client";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+type FormType = "sign-in" | "sign-up";
+
+const authFormSchema = (formType: FormType) => {
+  return z.object({
+    email: z.string().email(),
+    fullName:
+      formType === "sign-up" ? z.string().min(2).max(50) : z.string().optional()
+  });
+};
+
+const AuthForm = ({ type }: { type: FormType }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [accountId, setAccountId] = useState(null);
+
+  const formSchema = authFormSchema(type);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      email: ""
+    }
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+  };
+
+  return (
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex max-h-[800px] w-full max-w-[580px] flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8 !important"
+        >
+          <h1 className="text-[34px] leading-[42px] font-bold text-center text-light-100 md:text-left !important">
+            {type === "sign-in" ? "Sign In" : "Sign Up"}
+          </h1>
+          {type === "sign-up" && (
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-drop-1">
+                    <FormLabel className="text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full !important">
+                      Full Name
+                    </FormLabel>
+
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your full name"
+                        className="border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0
+                                   focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent
+                                   focus-visible:ring-offset-0 !important placeholder:text-light-200 body-2 !important"
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+
+                  <FormMessage className="text-red text-[14px] leading-[20px] font-normal ml-4 !important" />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-drop-1">
+                  <FormLabel className="text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full !important">
+                    Email
+                  </FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your email"
+                      className="border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 
+                                 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent 
+                                 focus-visible:ring-offset-0 !important placeholder:text-light-200 body-2 !important"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+
+                <FormMessage className="text-red text-[14px] leading-[20px] font-normal ml-4 !important" />
+              </FormItem>
+            )}
+          />
+
+          <Button
+            type="submit"
+            className="bg-brand hover:bg-brand-100 transition-all rounded-full text-[14px] leading-[20px] font-medium !important h-[66px] !important"
+            disabled={isLoading}
+          >
+            {type === "sign-in" ? "Sign In" : "Sign Up"}
+
+            {isLoading && (
+              <Image
+                src="/assets/icons/loader.svg"
+                alt="loader"
+                width={24}
+                height={24}
+                className="ml-2 animate-spin"
+              />
+            )}
+          </Button>
+
+          {errorMessage && (
+            <p className="text-[14px] leading-[20px] font-normal mx-auto w-fit rounded-xl bg-error/5 px-8 py-4 text-center text-error !important">
+              *{errorMessage}
+            </p>
+          )}
+
+          <div className="text-[14px] leading-[20px] font-normal flex justify-center">
+            <p className="text-light-100">
+              {type === "sign-in"
+                ? "Don't have an account?"
+                : "Already have an account?"}
+            </p>
+            <Link
+              href={type === "sign-in" ? "/sign-up" : "/sign-in"}
+              className="ml-1 font-medium text-brand"
+            >
+              {" "}
+              {type === "sign-in" ? "Sign Up" : "Sign In"}
+            </Link>
+          </div>
+        </form>
+      </Form>
+    </>
+  );
+};
+
+export default AuthForm;
