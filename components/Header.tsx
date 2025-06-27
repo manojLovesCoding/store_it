@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Search from "@/components/Search";
 import FileUploader from "@/components/FileUploader";
+import { signOutUser } from "@/lib/actions/user.actions";
 
 const Header = () => {
   return (
@@ -10,7 +11,13 @@ const Header = () => {
       <Search />
       <div className="flex items-center justify-center min-w-fit gap-4 !important">
         <FileUploader />
-        <form>
+        <form
+          action={async () => {
+            "use server";
+
+            await signOutUser();
+          }}
+        >
           <Button
             type="submit"
             className="flex items-center justify-center h-[52px] min-w-[54px]  rounded-full bg-brand/10 p-0 text-brand shadow-none transition-all hover:bg-brand/20 !important"

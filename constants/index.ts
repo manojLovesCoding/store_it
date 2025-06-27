@@ -82,6 +82,6 @@ export const sortTypes = [
 ];
 
 export const avatarPlaceholderUrl =
-  "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
+  "https://img.freepik.com/premium-vector/male-face-avatar-icon-set-flat-design-social-media-profiles_1281173-3806.jpg?semt=ais_hybrid&w=740";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
