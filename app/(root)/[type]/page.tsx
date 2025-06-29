@@ -8,16 +8,23 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
   const type = ((await params)?.type as string) || "";
   const files = await getFiles({});
   return (
-    <div className="page-container">
+    <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-8 !important">
       <section className="w-full">
-        <h1 className="h1 capitalize">{type}</h1>
-        <div className="total-size-section">
-          <p className="body-1">
-            Total: <span className="h5">0 MB</span>
+        <h1 className="text-[34px] leading-[42px] font-bold capitalize">
+          {type}
+        </h1>
+        <div className="flex mt-2 flex-col justify-between sm:flex-row sm:items-center !important">
+          <p className="text-[16px] leading-[24px] font-normal">
+            Total:{" "}
+            <span className="text-[16px] leading-[24px] font-semibold">
+              0 MB
+            </span>
           </p>
 
-          <div className="sort-container">
-            <p className="body-1 hidden text-light-200 sm:block">Sort by:</p>
+          <div className="mt-5 flex items-center sm:mt-0 sm:gap-3 !important">
+            <p className="text-[16px] leading-[24px] font-normal hidden text-light-200 sm:block">
+              Sort by:
+            </p>
 
             <Sort />
           </div>
@@ -25,13 +32,15 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
       </section>
       {/* Render the files */}
       {files.total > 0 ? (
-        <section className="file-list">
+        <section className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !important">
           {files.documents.map((file: Models.Document) => (
             <Card key={file.$id} file={file} />
           ))}
         </section>
       ) : (
-        <p className="empty-list">No files uploaded</p>
+        <p className="text-[16px] leading-[24px] font-normal mt-10 text-center text-light-200 !important">
+          No files uploaded
+        </p>
       )}
     </div>
   );
