@@ -86,9 +86,14 @@ export const formatDateTime = (isoString: string | null | undefined) => {
 
   const date = new Date(isoString);
 
+  // Convert to IST using toLocaleString with Asia/Kolkata timezone
+  const istDate = new Date(
+    date.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+
   // Get hours and adjust for 12-hour format
-  let hours = date.getHours();
-  const minutes = date.getMinutes();
+  let hours = istDate.getHours();
+  const minutes = istDate.getMinutes();
   const period = hours >= 12 ? "pm" : "am";
 
   // Convert hours to 12-hour format
@@ -96,7 +101,7 @@ export const formatDateTime = (isoString: string | null | undefined) => {
 
   // Format the time and date parts
   const time = `${hours}:${minutes.toString().padStart(2, "0")}${period}`;
-  const day = date.getDate();
+  const day = istDate.getDate();
   const monthNames = [
     "Jan",
     "Feb",
@@ -111,7 +116,7 @@ export const formatDateTime = (isoString: string | null | undefined) => {
     "Nov",
     "Dec"
   ];
-  const month = monthNames[date.getMonth()];
+  const month = monthNames[istDate.getMonth()];
 
   return `${time}, ${day} ${month}`;
 };
